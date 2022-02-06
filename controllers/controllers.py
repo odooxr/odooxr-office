@@ -33,8 +33,17 @@ class VROffice(http.Controller):
       </details>
     </header>
     <script type="module">
-      import {initXR} from '/odooxr-base/static/src/js/vr.js';
-      initXR()
+      import {Gltf2Node} from '/odooxr-base/static/src/js/render/nodes/gltf2.js';
+      import {SkyboxNode} from '/odooxr-base/static/src/js/render/nodes/skybox.js';
+      import {setupScene, initXR} from '/odooxr-base/static/src/js/vr.js';
+      setupScene((scene) => {
+        let office = new Gltf2Node(
+        {url: '/odooxr-office/static/media/gltf/office/office.gltf'});
+        scene.addNode(office);
+        scene.addNode(new SkyboxNode(
+        {url: '/odooxr-base/static/media/textures/milky-way-4k.png'}));
+      });
+      initXR();
     </script>
   </body>
 </html>
