@@ -25,7 +25,7 @@ class VROffice(http.Controller):
   <body id="vr-canvas">
     <header>
       <details open>
-        <summary>Showroom Session</summary>
+        <summary>Office Session</summary>
         <p>
           This sample demonstrates a simple VR Office for Odoo.
           <a class="back" href="/">Website</a>
