@@ -27,7 +27,7 @@ class VROffice(http.Controller):
       <details open>
         <summary>Showroom Session</summary>
         <p>
-          This sample demonstrates a simple VR office for Odoo.
+          This sample demonstrates a simple VR Office for Odoo.
           <a class="back" href="/">Website</a>
         </p>
       </details>
