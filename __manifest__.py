@@ -20,6 +20,8 @@
 
     'depends': ['base', 'odooxr-base'],
 
-    'data': [],
+    'data': [
+        'views/office_templates.xml',
+    ],
     'demo': [],
 }

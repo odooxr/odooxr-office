@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="odooxr-office.office_bootstrap">
+        <t t-call="web.layout">
+            <t t-set="head_web">
+                <script type="text/javascript">
+                    odoo.__session_info__ = <t t-out="json.dumps(session_info)"/>;
+                    odoo.reloadMenus = () => fetch(`/web/webclient/load_menus/${odoo.__session_info__.cache_hashes.load_menus}`).then(res => res.json());
+                    odoo.loadMenusPromise = odoo.reloadMenus();
+                    odoo.loadTemplatesPromise = fetch(`/web/webclient/qweb/${odoo.__session_info__.cache_hashes.qweb}?bundle=web.assets_qweb`).then(doc => doc.text());
+                    // Block to avoid leaking variables in the script scope
+                    {
+                       const { user_context,  cache_hashes } = odoo.__session_info__;
+                       // Prefetch translations to speedup webclient. This is done in JS because link rel="prefetch"
+                       // is not yet supported on safari.
+                       fetch(`/web/webclient/translations/${cache_hashes.translations}?lang=${user_context.lang}`);
+                    }
+                </script>
+	        <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+                <script src="/odooxr-office/static/src/js/menu.js"></script>
+            </t>
+            <t t-set="head" t-value="head_web + (head or '')"/>
+            <t t-set="body_classname" t-value="'o_web_client'"/>
+	    
+	    <t t-call="odooxr-office.office_scene"/>
+        </t>
+</template>
+
+<template id="odooxr-office.office_scene" name="Scene">
+    <a-scene>
+      <!--a-assets>
+        <a-asset-item id="office" src="/odooxr-office/static/media/gltf/office/office.gltf"></a-asset-item>
+      </a-assets-->
+
+      <a-entity id="leftHand" hand-tracking-controls="hand: left;"></a-entity>
+      <a-entity id="rightHand" hand-tracking-controls="hand: right;"></a-entity>
+      <a-entity id="leftControl" oculus-touch-controls="hand: left"></a-entity>
+      <a-entity id="rightControl" oculus-touch-controls="hand: right"></a-entity>
+
+      <a-entity tracked-controls="controller: 0; idPrefix: OpenVR"></a-entity>
+      <!--a-entity gltf-model="#office" rotation="0 90 0" position="0 0 -1.2" scale="1.5 1.5 1.5"></a-entity-->
+      <a-plane position="0 0 0" rotation="-90 0 0" width="16" height="16" color="#2d4331"></a-plane>
+
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+</template>
+ 
+</odoo>
