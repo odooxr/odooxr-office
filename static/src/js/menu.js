@@ -18,6 +18,7 @@ AFRAME.registerComponent('odoo-menu-option', {
     menu_plane.setAttribute('height', `${n_items*this.data.font_size}`);
     menu_plane.setAttribute('visible', 'false');
     menu_plane.setAttribute('position', {x: this.data.left_pos, y: 0, z: -0.2});
+    menu_plane.setAttribute('rotation', {x: 0, y: 0, z: 0});
     menu_plane.setAttribute('odoo-menu-section', {
       id: this.data.id,
       font_size: this.data.font_size,

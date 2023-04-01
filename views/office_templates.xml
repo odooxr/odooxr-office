@@ -2,73 +2,69 @@
 <odoo>
 
 <template id="odooxr-office.office_bootstrap">
-        <t t-call="web.layout">
-            <t t-set="head_web">
-                <script type="text/javascript">
-                    odoo.__session_info__ = <t t-out="json.dumps(session_info)"/>;
-                    odoo.reloadMenus = () => fetch(`/web/webclient/load_menus/${odoo.__session_info__.cache_hashes.load_menus}`).then(res => res.json());
-                    odoo.loadMenusPromise = odoo.reloadMenus();
-                    odoo.loadTemplatesPromise = fetch(`/web/webclient/qweb/${odoo.__session_info__.cache_hashes.qweb}?bundle=web.assets_qweb`).then(doc => doc.text());
-                    // Block to avoid leaking variables in the script scope
-                    {
-                       const { user_context,  cache_hashes } = odoo.__session_info__;
-                       // Prefetch translations to speedup webclient. This is done in JS because link rel="prefetch"
-                       // is not yet supported on safari.
-                       fetch(`/web/webclient/translations/${cache_hashes.translations}?lang=${user_context.lang}`);
-                    }
-                </script>
-	        <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.misc.min.js"></script>
-		<script src="https://unpkg.com/super-hands@^3.0.3/dist/super-hands.js"></script>
-		<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.js"></script>
-		<!--
-		<script src="https://unpkg.com/aframe-event-set-component@^5.0.0/dist/aframe-event-set-component.min.js"></script>
-		<script src="https://unpkg.com/aframe-physics-extras/dist/aframe-physics-extras.min.js"></script>
-                <script src="/odooxr-office/static/src/js/menu.js"></script>
-		-->
+  <t t-call="web.layout">
+      <t t-set="head_web">
+          <script type="text/javascript">
+              odoo.__session_info__ = <t t-out="json.dumps(session_info)"/>;
+              odoo.reloadMenus = () => fetch(`/web/webclient/load_menus/${odoo.__session_info__.cache_hashes.load_menus}`).then(res => res.json());
+              odoo.loadMenusPromise = odoo.reloadMenus();
+              // odoo.loadTemplatesPromise = fetch(`/web/webclient/qweb/${odoo.__session_info__.cache_hashes.qweb}?bundle=web.assets_qweb`).then(doc => doc.text());
+              // Block to avoid leaking variables in the script scope
+              {
+                 const { user_context,  cache_hashes } = odoo.__session_info__;
+                 // Prefetch translations to speedup webclient. This is done in JS because link rel="prefetch"
+                 // is not yet supported on safari.
+                 fetch(`/web/webclient/translations/${cache_hashes.translations}?lang=${user_context.lang}`);
+              }
+          </script>
+          <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+          <script src="https://unpkg.com/aframe-environment-component@1.3.0/dist/aframe-environment-component.min.js"></script>
+          <!--
+          <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.misc.min.js"></script>
+          <script src="https://unpkg.com/super-hands@^3.0.3/dist/super-hands.js"></script>
+          <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.js"></script>
+          <script src="https://unpkg.com/aframe-event-set-component@^5.0.0/dist/aframe-event-set-component.min.js"></script>
+          <script src="https://unpkg.com/aframe-physics-extras/dist/aframe-physics-extras.min.js"></script>
+          -->
+          <script src="/odooxr-office/static/src/js/menu.js"></script>
+      </t>
 
-            </t>
-            <t t-set="head" t-value="head_web + (head or '')"/>
-            <t t-set="body_classname" t-value="'o_web_client'"/>
-	    
-	    <t t-call="odooxr-office.office_scene"/>
-        </t>
+
+
+
+      <t t-set="head" t-value="head_web + (head or '')"/>
+      <t t-set="body_classname" t-value="'o_web_client'"/>
+      <t t-call="odooxr-office.office_scene"/>
+  </t>
 </template>
 
 <template id="odooxr-office.office_scene" name="Scene">
-    <a-scene physics="">
-      <a-assets>
-        <a-mixin id="all-interactions"
-                 hoverable="" grabbable="" stretchable="" draggable=""
-                 event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
-                 event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
-                 dynamic-body=""
-        ></a-mixin>
+  <a-scene background="color: #212"
+    environment=""
+    cursor="rayOrigin: mouse; fuse: false" 
+    raycaster="objects: .raycastable" 
+    physics="">
+      <a-entity
+        id="background"
+        position="0 0 0"
+        geometry="primitive: sphere; radius: 2.0"
+        material="color: red; side: back; shader: flat"
+        scale="0.001 0.001 0.001"
+        visible="false" class="raycastable">
+      </a-entity>
 
-        <a-mixin id="grab-move"
-                 hoverable="" grabbable="" draggable=""
-                 event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
-                 event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
-                 dynamic-body=""
-        ></a-mixin>
+      <a-entity
+        position="0 1.6 0"
+        camera="" look-controls="magicWindowTrackingEnabled: false; touchEnabled: false; mouseEnabled: false">
+        <a-entity
+          id="fadeBackground"
+          geometry="primitive: sphere; radius: 2.5"
+          material="color: black; side: back; shader: flat; transparent: true; opacity: 0.6" visible="false">
+        </a-entity>
+      </a-entity>
 
-        <a-mixin id="physics-hands"
-                 physics-collider="" phase-shift=""
-                 collision-filter="collisionForces: false"
-                 static-body="shape: sphere; sphereRadius: 0.02"
-                 super-hands="colliderEvent: collisions;
-                              colliderEventProperty: els;
-                              colliderEndEvent: collisions;
-                              colliderEndEventProperty: clearedEls;"
-        ></a-mixin>
-      </a-assets>
-
-      <a-entity id="leftControl" hand-controls="hand: left" mixin="physics-hands" odoo-menu="" ></a-entity>
-      <a-entity id="rightControl" hand-controls="hand: right" mixin="physics-hands" odoo-menu-controller=""></a-entity> 
-
-      <a-box position="0 0 0" width="100" height="0.01" depth="100" color="#2d4331" static-body=""></a-box>
-
-      <a-sky color="#ECECEC"></a-sky>
+      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: .raycastable" odoo-menu=""></a-entity>
+      <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: .raycastable" line="color: #118A7E" odoo-menu-controller=""></a-entity>
     </a-scene>
 </template>
  
