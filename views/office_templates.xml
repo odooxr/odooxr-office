@@ -61,9 +61,10 @@
           geometry="primitive: sphere; radius: 2.5"
           material="color: black; side: back; shader: flat; transparent: true; opacity: 0.6" visible="false">
         </a-entity>
+        <a-entity id="panel" geometry="primitive: plane; width: 2; height: 1" material="color: red; opacity: 0.2" position="0 0 -2" odoo-menu=""></a-entity>
       </a-entity>
 
-      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: .raycastable" odoo-menu=""></a-entity>
+      <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: .raycastable" odoo-menu-open=""></a-entity>
       <a-entity id="rightHand" laser-controls="hand: right" raycaster="objects: .raycastable" line="color: #118A7E" odoo-menu-controller=""></a-entity>
     </a-scene>
 </template>

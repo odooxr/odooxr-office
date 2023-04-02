@@ -17,8 +17,7 @@ AFRAME.registerComponent('odoo-menu-option', {
     menu_plane.setAttribute('width', `${this.data.width}`);
     menu_plane.setAttribute('height', `${n_items*this.data.font_size}`);
     menu_plane.setAttribute('visible', 'false');
-    menu_plane.setAttribute('position', {x: this.data.left_pos, y: 0, z: -0.2});
-    menu_plane.setAttribute('rotation', {x: 0, y: 0, z: 0});
+    menu_plane.setAttribute('position', {x: this.data.left_pos, y: 0, z: 0.2});
     menu_plane.setAttribute('odoo-menu-section', {
       id: this.data.id,
       font_size: this.data.font_size,
@@ -108,16 +107,6 @@ AFRAME.registerComponent('odoo-menu', {
       this.el.menu_data = menu_data;
 
       this.el.setAttribute("odoo-menu-option", this.data)
-      
-      this.el.addEventListener('buttondown', function(event) {
-        let menu = document.getElementById('menu_root');
-        menu.setAttribute('visible', 'true')
-      })
-  
-      this.el.addEventListener('buttonup', function(event) {
-        let menu = document.getElementById('menu_root');
-        menu.setAttribute('visible', 'false')
-      })
     });
   }
 });
@@ -136,6 +125,20 @@ AFRAME.registerComponent('odoo-menu-controller', {
       this.el.addEventListener('end-hover', function (event) {
         console.log('Entity end hover');
       });        
+  }
+});
+
+AFRAME.registerComponent('odoo-menu-open', {
+  play: function () {
+      this.el.addEventListener('buttondown', function(event) {
+        let menu = document.getElementById('menu_root');
+        menu.setAttribute('visible', 'true')
+      })
+  
+      this.el.addEventListener('buttonup', function(event) {
+        let menu = document.getElementById('menu_root');
+        menu.setAttribute('visible', 'false')
+      })
   }
 });
 
